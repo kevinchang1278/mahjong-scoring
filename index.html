@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>麻將計分系統</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="mahjong-pattern"></div>
+    <div id="startScreen" class="screen">
+        <h1>麻將計分系統</h1>
+        <button id="startButton">開始遊戲</button>
+    </div>
+
+    <div id="gameScreen" class="screen hidden">
+        <div class="settings">
+            <div class="input-group">
+                <label for="baseScore">底：</label>
+                <input type="number" id="baseScore" min="0" value="100">
+            </div>
+            <div class="input-group">
+                <label for="taiScore">台：</label>
+                <input type="number" id="taiScore" min="0" value="100">
+            </div>
+        </div>
+
+        <div class="players">
+            <div class="player">
+                <input type="text" class="player-name" value="玩家1">
+                <span class="score">0</span>
+            </div>
+            <div class="player">
+                <input type="text" class="player-name" value="玩家2">
+                <span class="score">0</span>
+            </div>
+            <div class="player">
+                <input type="text" class="player-name" value="玩家3">
+                <span class="score">0</span>
+            </div>
+            <div class="player">
+                <input type="text" class="player-name" value="玩家4">
+                <span class="score">0</span>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button id="huButton">胡牌</button>
+            <button id="zimoButton">自摸</button>
+            <button id="exportButton">導出Excel</button>
+        </div>
+    </div>
+
+    <div id="huModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>胡牌結算</h2>
+            <div class="modal-body">
+                <div class="winner-selection">
+                    <h3>贏家：</h3>
+                    <div class="player-buttons"></div>
+                </div>
+                <div class="loser-selection">
+                    <h3>放槍：</h3>
+                    <div class="player-buttons"></div>
+                </div>
+                <div class="tai-input">
+                    <label for="huTai">台數：</label>
+                    <input type="number" id="huTai" min="0" value="0">
+                </div>
+                <button id="confirmHu">確認</button>
+                <button id="cancelHu">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="zimoModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>自摸結算</h2>
+            <div class="modal-body">
+                <div class="winner-selection">
+                    <h3>自摸者：</h3>
+                    <div class="player-buttons"></div>
+                </div>
+                <div class="tai-input">
+                    <label for="zimoTai">台數：</label>
+                    <input type="number" id="zimoTai" min="0" value="0">
+                </div>
+                <button id="confirmZimo">確認</button>
+                <button id="cancelZimo">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

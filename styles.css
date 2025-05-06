@@ -1,0 +1,446 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #8B4513;  /* 深棕色，像麻將桌的顏色 */
+    --secondary-color: #C41E3A;  /* 紅色，像麻將牌的紅色 */
+    --accent-color: #228B22;  /* 森林綠，像麻將牌的綠色 */
+    --background-color: #F5DEB3;  /* 米色，像麻將牌的背景色 */
+    --text-color: #4A3728;  /* 深棕色文字 */
+    --card-background: #FFF8DC;  /* 米白色，像麻將牌的顏色 */
+    --shadow: 0 4px 6px rgba(139, 69, 19, 0.2);
+    --border-radius: 12px;
+}
+
+body {
+    font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+    background-color: var(--background-color);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* 麻將背景裝飾 */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(139, 69, 19, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 60% 40%, rgba(30, 144, 255, 0.12) 0%, transparent 20%),
+        radial-gradient(circle at 20% 80%, rgba(34, 139, 34, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 80% 70%, rgba(139, 69, 19, 0.1) 0%, transparent 20%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* 麻將牌圖案 */
+.mahjong-pattern {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.15;
+    background-image: 
+        url("https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/0401%E6%9D%B1%E9%A2%A8.svg/140px-0401%E6%9D%B1%E9%A2%A8.svg.png"),
+        url("https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/0403%E5%8D%97%E9%A2%A8.svg/140px-0403%E5%8D%97%E9%A2%A8.svg.png"),
+        url("https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/0402%E8%A5%BF%E9%A2%A8.svg/140px-0402%E8%A5%BF%E9%A2%A8.svg.png"),
+        url("https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/0404%E5%8C%97%E9%A2%A8.svg/140px-0404%E5%8C%97%E9%A2%A8.svg.png"),
+        url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/0405%E4%B8%AD.svg/140px-0405%E4%B8%AD.svg.png"),
+        url("https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/0406%E7%99%BC.svg/140px-0406%E7%99%BC.svg.png"),
+        url("https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/0407%E7%99%BD.svg/140px-0407%E7%99%BD.svg.png");
+    background-size: 220px 320px;
+    background-repeat: repeat;
+    background-position: 
+        0 0,
+        220px 0,
+        0 320px,
+        220px 320px,
+        0 640px,
+        220px 640px,
+        0 960px;
+    transform: rotate(-15deg);
+}
+
+.screen {
+    background-color: var(--card-background);
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    width: 90%;
+    max-width: 800px;
+    transition: all 0.3s ease;
+    border: 2px solid var(--primary-color);
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(5px);
+}
+
+.hidden {
+    display: none !important;
+}
+
+#startScreen {
+    text-align: center;
+    background: linear-gradient(135deg, var(--primary-color), #A0522D);
+    color: var(--card-background);
+    animation: screenFadeIn 1s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+#startScreen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 5h30v30h-30z' fill='%23FFF8DC' fill-opacity='0.1'/%3E%3C/svg%3E");
+    background-size: 40px 40px;
+    opacity: 0.1;
+    z-index: 0;
+}
+
+#startScreen h1 {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 2rem;
+    font-size: 3.5rem;
+    font-weight: 900;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+    letter-spacing: 2px;
+    font-family: 'Noto Serif TC', serif;
+    animation: titleFadeIn 1.5s ease-out;
+}
+
+#startButton {
+    animation: buttonFadeIn 2s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+#startButton::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    animation: buttonShine 2s ease-out;
+}
+
+@keyframes screenFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes titleFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    50% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes buttonFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    60% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes buttonShine {
+    0% {
+        left: -100%;
+    }
+    20% {
+        left: 100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+button {
+    padding: 1.2rem 2.5rem;
+    font-size: 1.3rem;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: #2980b9;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 700;
+    box-shadow: var(--shadow);
+    letter-spacing: 1px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    background-color: #228B22;
+}
+
+.settings {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.input-group label {
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.input-group input {
+    padding: 0.8rem;
+    border: 2px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    width: 120px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: var(--card-background);
+}
+
+.input-group input:focus {
+    border-color: var(--secondary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.2);
+}
+
+.players {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.player {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+    border: 2px solid var(--primary-color);
+}
+
+.player:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+    border-color: var(--secondary-color);
+}
+
+.player-name {
+    padding: 0.8rem;
+    border: 2px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    width: 180px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background-color: var(--card-background);
+}
+
+.player-name:focus {
+    border-color: var(--secondary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.2);
+}
+
+.score {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--secondary-color);
+    min-width: 100px;
+    text-align: right;
+    font-family: 'Noto Serif TC', serif;
+}
+
+.buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: var(--card-background);
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    width: 90%;
+    max-width: 500px;
+    box-shadow: var(--shadow);
+    animation: modalFadeIn 0.3s ease;
+    border: 2px solid var(--primary-color);
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-content h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-size: 2.2rem;
+    font-weight: 900;
+    font-family: 'Noto Serif TC', serif;
+    letter-spacing: 1px;
+}
+
+.modal-content h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.modal-body {
+    margin-top: 1.5rem;
+}
+
+.player-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.player-buttons button {
+    background-color: var(--card-background);
+    color: var(--text-color);
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    border: 2px solid var(--primary-color);
+}
+
+.player-buttons button.selected {
+    background-color: var(--secondary-color);
+    color: var(--card-background);
+    border-color: var(--secondary-color);
+}
+
+.tai-input {
+    margin: 1.5rem 0;
+}
+
+.tai-input label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.tai-input input {
+    padding: 0.8rem;
+    border: 2px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    width: 120px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background-color: var(--card-background);
+}
+
+.tai-input input:focus {
+    border-color: var(--secondary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.2);
+}
+
+#confirmHu, #confirmZimo {
+    margin-right: 1rem;
+    background-color: var(--secondary-color);
+}
+
+#cancelHu, #cancelZimo {
+    background-color: var(--accent-color);
+}
+
+#cancelHu:hover, #cancelZimo:hover {
+    background-color: #c0392b;
+}
+
+#exportButton {
+    background-color: var(--primary-color);
+}
+
+#exportButton:hover {
+    background-color: #6B3410;
+} 
