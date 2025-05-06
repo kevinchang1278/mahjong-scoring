@@ -504,7 +504,8 @@ button:hover {
     .player-name {
         padding: 0.5rem;
         font-size: 0.9rem;
-        flex: 1;
+        flex: 0.5;
+        width: 50%;
     }
 
     .score {
