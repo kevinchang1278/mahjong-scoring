@@ -330,6 +330,7 @@ button:hover {
     justify-content: center;
     align-items: center;
     backdrop-filter: blur(5px);
+    z-index: 1000;
 }
 
 .modal-content {
@@ -341,6 +342,8 @@ button:hover {
     box-shadow: var(--shadow);
     animation: modalFadeIn 0.3s ease;
     border: 2px solid var(--primary-color);
+    position: relative;
+    z-index: 1001;
 }
 
 @keyframes modalFadeIn {
