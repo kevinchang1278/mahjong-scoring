@@ -480,7 +480,7 @@ button:hover {
     }
 
     .players {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
         gap: 0.5rem;
         margin-bottom: 0.5rem;
     }
@@ -488,15 +488,21 @@ button:hover {
     .player {
         padding: 0.5rem;
         gap: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .player-name {
         padding: 0.5rem;
         font-size: 0.9rem;
+        flex: 1;
     }
 
     .score {
         font-size: 1.5rem;
+        min-width: 60px;
+        text-align: right;
     }
 
     #startScreen h1 {
