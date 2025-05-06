@@ -471,15 +471,20 @@ button:hover {
     .input-group {
         flex: 1;
         margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
     }
 
     .input-group label {
         font-size: 1rem;
+        white-space: nowrap;
     }
 
     .input-group input {
-        padding: 0.5rem;
+        padding: 0.3rem;
         font-size: 0.9rem;
+        width: 60px;
     }
 
     .players {
