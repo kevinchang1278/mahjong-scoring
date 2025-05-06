@@ -573,4 +573,11 @@ button:hover {
         padding: 0.5rem 1rem;
         font-size: 0.9rem;
     }
+}
+
+.modal-content button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
 } 
