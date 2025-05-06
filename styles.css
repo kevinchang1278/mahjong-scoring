@@ -309,7 +309,7 @@ button:hover {
     color: var(--secondary-color);
     min-width: 100px;
     text-align: right;
-    font-family: 'Noto Serif TC', serif;
+    font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif;
 }
 
 .buttons {
@@ -359,7 +359,7 @@ button:hover {
     margin-bottom: 1.5rem;
     font-size: 2.2rem;
     font-weight: 900;
-    font-family: 'Noto Serif TC', serif;
+    font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif;
     letter-spacing: 1px;
 }
 
