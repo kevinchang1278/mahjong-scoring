@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif;
 }
 
 :root {
@@ -16,7 +17,7 @@
 }
 
 body {
-    font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+    font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif;
     background-color: var(--background-color);
     min-height: 100vh;
     display: flex;
@@ -125,7 +126,7 @@ body::before {
     font-weight: 900;
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
     letter-spacing: 2px;
-    font-family: 'Noto Serif TC', serif;
+    font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif;
     animation: titleFadeIn 1.5s ease-out;
 }
 
