@@ -59,6 +59,22 @@ function showModal(modal) {
                 // 只清除同一容器中的其他按鈕的選中狀態
                 buttonsContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('selected'));
                 button.classList.add('selected');
+
+                // 如果是胡牌模態框，且點擊的是贏家選擇區域
+                if (modal === huModal && buttonsContainer.closest('.winner-selection')) {
+                    const winnerIndex = parseInt(button.dataset.index);
+                    // 在放槍區域禁用贏家按鈕
+                    const loserButtons = huModal.querySelector('.loser-selection .player-buttons');
+                    loserButtons.querySelectorAll('button').forEach(btn => {
+                        if (parseInt(btn.dataset.index) === winnerIndex) {
+                            btn.disabled = true;
+                            btn.style.opacity = '0.5';
+                        } else {
+                            btn.disabled = false;
+                            btn.style.opacity = '1';
+                        }
+                    });
+                }
             });
             buttonsContainer.appendChild(button);
         });
