@@ -307,24 +307,30 @@ document.getElementById('confirmZimo').addEventListener('click', () => {
         // 保存分數快照
         saveScoreSnapshot();
 
-        // 自摸者得分
-        gameState.players[winnerIndex].score += score;
-
-        // 其他玩家扣分
+        // 分别计算每个输家要扣的分数，并累加总和
+        let totalDeductScore = 0;
+        
         gameState.players.forEach((player, index) => {
             if (index !== winnerIndex) {
-                let deductScore = score / 3;
+                // 基础扣分
+                let deductScore = gameState.baseScore + (tai * gameState.taiScore);
                 
-                // 如果莊家被自摸，多扣一台
+                // 如果输家是庄家，还要多扣一台的钱
                 if (index === bankerIndex && bankerIndex !== winnerIndex) {
-                    const extraScore = calculateBankerExtraScore(tai);
+                    const extraScore = gameState.taiScore;
                     deductScore += extraScore;
-                    gameState.players[winnerIndex].score += extraScore; // 自摸者多得一台
                 }
                 
+                // 输家扣分
                 player.score -= deductScore;
+                
+                // 累加到总扣分
+                totalDeductScore += deductScore;
             }
         });
+        
+        // 赢家得到的总分数 = 所有输家扣分的总和
+        gameState.players[winnerIndex].score += totalDeductScore;
 
         recordHistory('自摸', winnerIndex, undefined, tai, score, bankerIndex);
         updateScores();

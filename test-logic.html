@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自摸计分逻辑测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: white;
+        }
+        .player {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .score {
+            font-weight: bold;
+            color: #dc3545;
+        }
+        .positive {
+            color: #28a745;
+        }
+        .banker {
+            background-color: #ffc107;
+            color: #212529;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        .winner {
+            background-color: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        .info-box {
+            background-color: #e8f4fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #2196F3;
+        }
+        .calculation {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>自摸计分逻辑测试</h1>
+    
+    <div class="info-box">
+        <h3>修正后的计分逻辑：</h3>
+        <ul>
+            <li>✅ 分别计算每个输家要扣的分数</li>
+            <li>✅ 如果输家是庄家，还要多扣一台的钱</li>
+            <li>✅ 如果赢家是庄家，就忽略额外扣分</li>
+            <li>✅ 所有输家扣分的总和 = 赢家得到的总分数</li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h2>测试场景1：庄家自摸（赢家是庄家）</h2>
+        <p>庄家自摸时，其他玩家正常扣分，庄家不会额外扣分</p>
+        <div class="calculation">
+            <strong>假设：</strong>底分100，台分100，2台<br>
+            <strong>自摸分数：</strong>100 + (2 × 100) = 300<br>
+            <strong>每个输家扣分：</strong>300 ÷ 3 = 100<br>
+            <strong>庄家额外扣分：</strong>0（因为赢家是庄家）<br>
+            <strong>总扣分：</strong>100 × 3 = 300<br>
+            <strong>赢家得分：</strong>300
+        </div>
+        <div class="player">
+            <span>玩家1 <span class="winner">自摸者</span> <span class="banker">庄家</span></span>
+            <span class="score positive">+300</span>
+        </div>
+        <div class="player">
+            <span>玩家2</span>
+            <span class="score">-100</span>
+        </div>
+        <div class="player">
+            <span>玩家3</span>
+            <span class="score">-100</span>
+        </div>
+        <div class="player">
+            <span>玩家4</span>
+            <span class="score">-100</span>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>测试场景2：庄家被自摸（输家是庄家）</h2>
+        <p>庄家被自摸时，庄家要多扣一台的钱</p>
+        <div class="calculation">
+            <strong>假设：</strong>底分100，台分100，2台<br>
+            <strong>自摸分数：</strong>100 + (2 × 100) = 300<br>
+            <strong>普通输家扣分：</strong>300 ÷ 3 = 100<br>
+            <strong>庄家额外扣分：</strong>100 + (2 × 100) = 300<br>
+            <strong>庄家总扣分：</strong>100 + 300 = 400<br>
+            <strong>总扣分：</strong>100 + 100 + 400 = 600<br>
+            <strong>赢家得分：</strong>600
+        </div>
+        <div class="player">
+            <span>玩家1 <span class="winner">自摸者</span></span>
+            <span class="score positive">+600</span>
+        </div>
+        <div class="player">
+            <span>玩家2 <span class="banker">庄家</span></span>
+            <span class="score">-400</span>
+        </div>
+        <div class="player">
+            <span>玩家3</span>
+            <span class="score">-100</span>
+        </div>
+        <div class="player">
+            <span>玩家4</span>
+            <span class="score">-100</span>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>关键逻辑说明：</h2>
+        <ul>
+            <li><strong>赢家是庄家</strong>：其他玩家正常扣分，无额外扣分</li>
+            <li><strong>输家是庄家</strong>：庄家多扣一台的钱（底分 + 台数×台分）</li>
+            <li><strong>分数平衡</strong>：所有输家扣分的总和 = 赢家得到的总分数</li>
+            <li><strong>庄家规则</strong>：体现庄家的优势和风险</li>
+        </ul>
+    </div>
+</body>
+</html> 
