@@ -290,11 +290,12 @@ button:hover {
     padding: 0.8rem;
     border: 2px solid var(--primary-color);
     border-radius: var(--border-radius);
-    width: 180px;
+    width: 160px;
     font-size: 1.1rem;
     font-weight: 500;
     transition: all 0.3s ease;
     background-color: var(--card-background);
+    flex-shrink: 0;
 }
 
 .player-name:focus {
@@ -306,8 +307,8 @@ button:hover {
 .score-container {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    min-width: 140px;
+    gap: 0.4rem;
+    min-width: 130px;
     justify-content: flex-end;
     flex-shrink: 0;
 }
@@ -316,21 +317,21 @@ button:hover {
     font-size: 2rem;
     font-weight: 900;
     color: var(--secondary-color);
-    min-width: 80px;
+    min-width: 70px;
     text-align: right;
     font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif;
     flex-shrink: 0;
 }
 
 .edit-score-btn {
-    padding: 0.4rem;
-    font-size: 0.9rem;
+    padding: 0.3rem;
+    font-size: 0.8rem;
     background-color: var(--accent-color);
     color: white;
     border: none;
     border-radius: 50%;
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
@@ -581,26 +582,26 @@ button:hover {
         padding: 0.5rem;
         font-size: 0.9rem;
         flex: 0.5;
-        width: 50%;
+        width: 45%;
         margin-right: 0.2rem;
     }
 
     .score-container {
-        min-width: 70px;
-        gap: 0.3rem;
+        min-width: 65px;
+        gap: 0.2rem;
     }
 
     .score {
         font-size: 1.5rem;
-        min-width: 40px;
+        min-width: 35px;
         text-align: right;
     }
 
     .edit-score-btn {
-        width: 26px;
-        height: 26px;
-        font-size: 0.7rem;
-        padding: 0.2rem;
+        width: 24px;
+        height: 24px;
+        font-size: 0.6rem;
+        padding: 0.15rem;
     }
 
     #startScreen h1 {
