@@ -140,20 +140,31 @@ function calculateZimoScore(tai) {
     return baseScore * 3;
 }
 
+// 計算莊家額外扣分
+function calculateBankerExtraScore(tai) {
+    return gameState.baseScore + (tai * gameState.taiScore);
+}
+
 // 記錄遊戲歷史
-function recordHistory(type, winner, loser, tai, score) {
+function recordHistory(type, winner, loser, tai, score, banker = null) {
     const record = {
         type,
         winner: gameState.players[winner].name,
         loser: loser !== undefined ? gameState.players[loser].name : null,
         tai,
         score,
+        banker: banker !== null ? gameState.players[banker].name : null,
         timestamp: new Date().toLocaleString()
     };
     
     // 如果是手動編輯，添加額外信息
     if (type === '手動編輯') {
         record.description = `分數從 ${gameState.players[winner].score - score} 變更為 ${gameState.players[winner].score}`;
+    }
+    
+    // 如果是自摸且莊家被自摸，添加額外信息
+    if (type === '自摸' && banker !== null && banker !== winner) {
+        record.description = `莊家被自摸，多扣一台`;
     }
     
     gameState.history.push(record);
@@ -173,7 +184,7 @@ function exportToExcel() {
 
     // 創建歷史記錄表
     const historyData = [
-        ['時間', '類型', '贏家', '輸家', '台數', '分數', '備註'],
+        ['時間', '類型', '贏家', '輸家', '台數', '分數', '莊家', '備註'],
         ...gameState.history.map(record => [
             record.timestamp,
             record.type,
@@ -181,6 +192,7 @@ function exportToExcel() {
             record.loser || '',
             record.tai,
             record.score,
+            record.banker || '',
             record.description || ''
         ])
     ];
@@ -227,20 +239,34 @@ document.getElementById('confirmHu').addEventListener('click', () => {
 
 document.getElementById('confirmZimo').addEventListener('click', () => {
     const winnerButton = zimoModal.querySelector('.winner-selection .player-buttons .selected');
+    const bankerButton = zimoModal.querySelector('.banker-selection .player-buttons .selected');
     const tai = parseInt(document.getElementById('zimoTai').value);
 
-    if (winnerButton && !isNaN(tai)) {
+    if (winnerButton && bankerButton && !isNaN(tai)) {
         const winnerIndex = parseInt(winnerButton.dataset.index);
+        const bankerIndex = parseInt(bankerButton.dataset.index);
         const score = calculateZimoScore(tai);
 
+        // 自摸者得分
         gameState.players[winnerIndex].score += score;
+
+        // 其他玩家扣分
         gameState.players.forEach((player, index) => {
             if (index !== winnerIndex) {
-                player.score -= score / 3;
+                let deductScore = score / 3;
+                
+                // 如果莊家被自摸，多扣一台
+                if (index === bankerIndex && bankerIndex !== winnerIndex) {
+                    const extraScore = calculateBankerExtraScore(tai);
+                    deductScore += extraScore;
+                    gameState.players[winnerIndex].score += extraScore; // 自摸者多得一台
+                }
+                
+                player.score -= deductScore;
             }
         });
 
-        recordHistory('自摸', winnerIndex, undefined, tai, score);
+        recordHistory('自摸', winnerIndex, undefined, tai, score, bankerIndex);
         updateScores();
         hideModal(zimoModal);
     }

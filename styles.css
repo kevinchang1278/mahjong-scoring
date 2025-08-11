@@ -498,6 +498,32 @@ button:hover {
     text-align: center;
 }
 
+.banker-selection {
+    margin: 1.5rem 0;
+}
+
+.banker-selection h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.zimo-comment {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin: 1.5rem 0;
+    border-left: 4px solid var(--accent-color);
+}
+
+.zimo-comment p {
+    margin: 0.5rem 0;
+    color: var(--text-color);
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
 .button-group {
     display: flex;
     gap: 1rem;
@@ -632,6 +658,16 @@ button:hover {
     .modal-content h3 {
         font-size: 1.2rem;
         margin-bottom: 0.5rem;
+    }
+
+    .zimo-comment {
+        padding: 0.8rem;
+        margin: 1rem 0;
+    }
+
+    .zimo-comment p {
+        font-size: 0.9rem;
+        margin: 0.3rem 0;
     }
 
     .player-buttons {
