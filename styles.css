@@ -544,6 +544,14 @@ button:hover {
     background-color: #c0392b;
 }
 
+#undoButton {
+    background-color: #6c757d;
+}
+
+#undoButton:hover {
+    background-color: #5a6268;
+}
+
 #exportButton {
     background-color: var(--primary-color);
 }
@@ -705,4 +713,29 @@ button:hover {
     cursor: not-allowed;
     opacity: 0.5;
     pointer-events: none;
+}
+
+.undo-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: var(--accent-color);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    z-index: 2000;
+    animation: slideInRight 0.3s ease;
+    font-weight: 500;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 } 

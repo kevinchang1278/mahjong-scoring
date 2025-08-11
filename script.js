@@ -3,7 +3,8 @@ let gameState = {
     players: [],
     baseScore: 100,
     taiScore: 100,
-    history: []
+    history: [],
+    scoreHistory: [] // 用於回復功能的分數歷史
 };
 
 // DOM 元素
@@ -145,6 +146,59 @@ function calculateBankerExtraScore(tai) {
     return gameState.baseScore + (tai * gameState.taiScore);
 }
 
+// 保存分數快照
+function saveScoreSnapshot() {
+    const snapshot = {
+        players: gameState.players.map(player => ({
+            name: player.name,
+            score: player.score
+        })),
+        timestamp: new Date().toLocaleString()
+    };
+    gameState.scoreHistory.push(snapshot);
+}
+
+// 回復到上一個分數
+function undoLastAction() {
+    if (gameState.scoreHistory.length > 0) {
+        const lastSnapshot = gameState.scoreHistory.pop();
+        
+        // 恢復分數
+        lastSnapshot.players.forEach((playerData, index) => {
+            if (index < gameState.players.length) {
+                gameState.players[index].score = playerData.score;
+            }
+        });
+        
+        // 移除最後一條歷史記錄
+        if (gameState.history.length > 0) {
+            gameState.history.pop();
+        }
+        
+        updateScores();
+        
+        // 顯示回復成功訊息
+        showUndoMessage('已回復到上一個分數');
+    } else {
+        showUndoMessage('沒有可回復的操作');
+    }
+}
+
+// 顯示回復訊息
+function showUndoMessage(message) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'undo-message';
+    messageDiv.textContent = message;
+    document.body.appendChild(messageDiv);
+    
+    // 3秒後自動移除
+    setTimeout(() => {
+        if (messageDiv.parentNode) {
+            messageDiv.parentNode.removeChild(messageDiv);
+        }
+    }, 3000);
+}
+
 // 記錄遊戲歷史
 function recordHistory(type, winner, loser, tai, score, banker = null) {
     const record = {
@@ -228,6 +282,9 @@ document.getElementById('confirmHu').addEventListener('click', () => {
         const loserIndex = parseInt(loserButton.dataset.index);
         const score = calculateHuScore(tai);
 
+        // 保存分數快照
+        saveScoreSnapshot();
+
         gameState.players[winnerIndex].score += score;
         gameState.players[loserIndex].score -= score;
 
@@ -246,6 +303,9 @@ document.getElementById('confirmZimo').addEventListener('click', () => {
         const winnerIndex = parseInt(winnerButton.dataset.index);
         const bankerIndex = parseInt(bankerButton.dataset.index);
         const score = calculateZimoScore(tai);
+
+        // 保存分數快照
+        saveScoreSnapshot();
 
         // 自摸者得分
         gameState.players[winnerIndex].score += score;
@@ -286,6 +346,9 @@ document.getElementById('confirmEditScore').addEventListener('click', () => {
     const newScore = parseInt(newScoreInput.value);
     
     if (!isNaN(newScore)) {
+        // 保存分數快照
+        saveScoreSnapshot();
+        
         const oldScore = gameState.players[playerIndex].score;
         gameState.players[playerIndex].score = newScore;
         
@@ -300,6 +363,9 @@ document.getElementById('confirmEditScore').addEventListener('click', () => {
 document.getElementById('cancelEditScore').addEventListener('click', () => {
     hideModal(editScoreModal);
 });
+
+// 回復按鈕事件監聽器
+document.getElementById('undoButton').addEventListener('click', undoLastAction);
 
 exportButton.addEventListener('click', exportToExcel);
 
