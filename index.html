@@ -35,19 +35,31 @@
         <div class="players">
             <div class="player">
                 <input type="text" class="player-name" value="玩家1">
-                <span class="score">0</span>
+                <div class="score-container">
+                    <span class="score">0</span>
+                    <button class="edit-score-btn" title="編輯分數">✏️</button>
+                </div>
             </div>
             <div class="player">
                 <input type="text" class="player-name" value="玩家2">
-                <span class="score">0</span>
+                <div class="score-container">
+                    <span class="score">0</span>
+                    <button class="edit-score-btn" title="編輯分數">✏️</button>
+                </div>
             </div>
             <div class="player">
                 <input type="text" class="player-name" value="玩家3">
-                <span class="score">0</span>
+                <div class="score-container">
+                    <span class="score">0</span>
+                    <button class="edit-score-btn" title="編輯分數">✏️</button>
+                </div>
             </div>
             <div class="player">
                 <input type="text" class="player-name" value="玩家4">
-                <span class="score">0</span>
+                <div class="score-container">
+                    <span class="score">0</span>
+                    <button class="edit-score-btn" title="編輯分數">✏️</button>
+                </div>
             </div>
         </div>
 
@@ -94,6 +106,25 @@
                 </div>
                 <button id="confirmZimo">確認</button>
                 <button id="cancelZimo">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="editScoreModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>編輯分數</h2>
+            <div class="modal-body">
+                <div class="player-info">
+                    <h3 id="editPlayerName">玩家名稱</h3>
+                </div>
+                <div class="score-input">
+                    <label for="newScore">新分數：</label>
+                    <input type="number" id="newScore" step="1">
+                </div>
+                <div class="button-group">
+                    <button id="confirmEditScore">確認</button>
+                    <button id="cancelEditScore">取消</button>
+                </div>
             </div>
         </div>
     </div>

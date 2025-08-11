@@ -17,6 +17,9 @@ const zimoButton = document.getElementById('zimoButton');
 const exportButton = document.getElementById('exportButton');
 const huModal = document.getElementById('huModal');
 const zimoModal = document.getElementById('zimoModal');
+const editScoreModal = document.getElementById('editScoreModal');
+const editPlayerName = document.getElementById('editPlayerName');
+const newScoreInput = document.getElementById('newScore');
 
 // 初始化遊戲
 function initGame() {
@@ -24,7 +27,8 @@ function initGame() {
     gameState.players = Array.from(document.querySelectorAll('.player')).map((player, index) => ({
         name: player.querySelector('.player-name').value,
         score: 0,
-        element: player
+        element: player,
+        editButton: player.querySelector('.edit-score-btn')
     }));
 
     // 設置底分和台分
@@ -33,6 +37,9 @@ function initGame() {
 
     // 更新顯示
     updateScores();
+    
+    // 綁定編輯分數按鈕事件
+    bindEditScoreEvents();
 }
 
 // 更新分數顯示
@@ -86,6 +93,42 @@ function hideModal(modal) {
     modal.classList.add('hidden');
 }
 
+// 綁定編輯分數按鈕事件
+function bindEditScoreEvents() {
+    gameState.players.forEach((player, index) => {
+        player.editButton.addEventListener('click', () => {
+            showEditScoreModal(index);
+        });
+    });
+}
+
+// 顯示編輯分數模態框
+function showEditScoreModal(playerIndex) {
+    const player = gameState.players[playerIndex];
+    editPlayerName.textContent = player.name;
+    newScoreInput.value = player.score;
+    editScoreModal.dataset.playerIndex = playerIndex;
+    showModal(editScoreModal);
+    newScoreInput.focus();
+    newScoreInput.select();
+    
+    // 添加鍵盤事件監聽
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            document.getElementById('confirmEditScore').click();
+        } else if (e.key === 'Escape') {
+            document.getElementById('cancelEditScore').click();
+        }
+    };
+    
+    newScoreInput.addEventListener('keydown', handleKeyPress);
+    
+    // 清理事件監聽器
+    editScoreModal.addEventListener('hidden', () => {
+        newScoreInput.removeEventListener('keydown', handleKeyPress);
+    }, { once: true });
+}
+
 // 計算胡牌分數
 function calculateHuScore(tai) {
     return gameState.baseScore + (tai * gameState.taiScore);
@@ -107,6 +150,12 @@ function recordHistory(type, winner, loser, tai, score) {
         score,
         timestamp: new Date().toLocaleString()
     };
+    
+    // 如果是手動編輯，添加額外信息
+    if (type === '手動編輯') {
+        record.description = `分數從 ${gameState.players[winner].score - score} 變更為 ${gameState.players[winner].score}`;
+    }
+    
     gameState.history.push(record);
 }
 
@@ -124,14 +173,15 @@ function exportToExcel() {
 
     // 創建歷史記錄表
     const historyData = [
-        ['時間', '類型', '贏家', '輸家', '台數', '分數'],
+        ['時間', '類型', '贏家', '輸家', '台數', '分數', '備註'],
         ...gameState.history.map(record => [
             record.timestamp,
             record.type,
             record.winner,
             record.loser || '',
             record.tai,
-            record.score
+            record.score,
+            record.description || ''
         ])
     ];
     const historySheet = XLSX.utils.aoa_to_sheet(historyData);
@@ -202,6 +252,27 @@ document.getElementById('cancelHu').addEventListener('click', () => {
 
 document.getElementById('cancelZimo').addEventListener('click', () => {
     hideModal(zimoModal);
+});
+
+// 編輯分數事件監聽器
+document.getElementById('confirmEditScore').addEventListener('click', () => {
+    const playerIndex = parseInt(editScoreModal.dataset.playerIndex);
+    const newScore = parseInt(newScoreInput.value);
+    
+    if (!isNaN(newScore)) {
+        const oldScore = gameState.players[playerIndex].score;
+        gameState.players[playerIndex].score = newScore;
+        
+        // 記錄分數變更歷史
+        recordHistory('手動編輯', playerIndex, undefined, 0, newScore - oldScore);
+        
+        updateScores();
+        hideModal(editScoreModal);
+    }
+});
+
+document.getElementById('cancelEditScore').addEventListener('click', () => {
+    hideModal(editScoreModal);
 });
 
 exportButton.addEventListener('click', exportToExcel);
