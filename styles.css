@@ -509,6 +509,35 @@ button:hover {
     color: var(--primary-color);
 }
 
+.lianzhuang-input {
+    margin: 1.5rem 0;
+}
+
+.lianzhuang-input label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.lianzhuang-input input {
+    padding: 0.8rem;
+    border: 2px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    width: 120px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background-color: var(--card-background);
+}
+
+.lianzhuang-input input:focus {
+    border-color: var(--secondary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.2);
+}
+
 .zimo-comment {
     background-color: #f8f9fa;
     padding: 1rem;
@@ -684,6 +713,20 @@ button:hover {
     }
 
     .player-buttons button {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .lianzhuang-input {
+        margin: 0.5rem 0;
+    }
+
+    .lianzhuang-input label {
+        font-size: 1rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .lianzhuang-input input {
         padding: 0.5rem;
         font-size: 0.9rem;
     }

@@ -21,6 +21,7 @@ const zimoModal = document.getElementById('zimoModal');
 const editScoreModal = document.getElementById('editScoreModal');
 const editPlayerName = document.getElementById('editPlayerName');
 const newScoreInput = document.getElementById('newScore');
+const lianzhuangInput = document.getElementById('lianzhuang');
 
 // 初始化遊戲
 function initGame() {
@@ -200,7 +201,7 @@ function showUndoMessage(message) {
 }
 
 // 記錄遊戲歷史
-function recordHistory(type, winner, loser, tai, score, banker = null) {
+function recordHistory(type, winner, loser, tai, score, banker = null, lianzhuang = 0) {
     const record = {
         type,
         winner: gameState.players[winner].name,
@@ -208,6 +209,7 @@ function recordHistory(type, winner, loser, tai, score, banker = null) {
         tai,
         score,
         banker: banker !== null ? gameState.players[banker].name : null,
+        lianzhuang,
         timestamp: new Date().toLocaleString()
     };
     
@@ -218,7 +220,8 @@ function recordHistory(type, winner, loser, tai, score, banker = null) {
     
     // 如果是自摸且莊家被自摸，添加額外信息
     if (type === '自摸' && banker !== null && banker !== winner) {
-        record.description = `莊家被自摸，多扣一台`;
+        const lianzhuangText = lianzhuang > 0 ? `，連莊${lianzhuang}次` : '';
+        record.description = `莊家被自摸，多扣一台${lianzhuangText}`;
     }
     
     gameState.history.push(record);
@@ -238,7 +241,7 @@ function exportToExcel() {
 
     // 創建歷史記錄表
     const historyData = [
-        ['時間', '類型', '贏家', '輸家', '台數', '分數', '莊家', '備註'],
+        ['時間', '類型', '贏家', '輸家', '台數', '分數', '莊家', '連莊', '備註'],
         ...gameState.history.map(record => [
             record.timestamp,
             record.type,
@@ -247,6 +250,7 @@ function exportToExcel() {
             record.tai,
             record.score,
             record.banker || '',
+            record.lianzhuang || '',
             record.description || ''
         ])
     ];
@@ -317,7 +321,8 @@ document.getElementById('confirmZimo').addEventListener('click', () => {
                 
                 // 如果输家是庄家，还要多扣一台的钱
                 if (index === bankerIndex && bankerIndex !== winnerIndex) {
-                    const extraScore = gameState.taiScore;
+                    const lianzhuang = parseInt(lianzhuangInput.value) || 0;
+                    const extraScore = gameState.taiScore + (lianzhuang * 2 * gameState.taiScore);
                     deductScore += extraScore;
                 }
                 
@@ -332,7 +337,8 @@ document.getElementById('confirmZimo').addEventListener('click', () => {
         // 赢家得到的总分数 = 所有输家扣分的总和
         gameState.players[winnerIndex].score += totalDeductScore;
 
-        recordHistory('自摸', winnerIndex, undefined, tai, score, bankerIndex);
+        const lianzhuang = parseInt(lianzhuangInput.value) || 0;
+        recordHistory('自摸', winnerIndex, undefined, tai, score, bankerIndex, lianzhuang);
         updateScores();
         hideModal(zimoModal);
     }
